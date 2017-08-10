@@ -1,19 +1,20 @@
 {
   "name": "ycs-plugin-fileuploader",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "ycs-plugin-fileuploader",
   "license": "MIT",
   "repository": "",
   "author": {
-    "name": "",
-    "email": "",
+    "name": "Yu Chen",
+    "email": "yu.chen@live.ie",
     "url": ""
   },
   "keywords": [
     ""
   ],
   "files": [
-    "lib"
+    "lib",
+    "default_config"
   ],
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
