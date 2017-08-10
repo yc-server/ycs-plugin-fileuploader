@@ -11,7 +11,6 @@ export async function setupRouter(app: Ycs): Promise<Router[]> {
   for (const item of config) {
     const model = createModel(item);
     const controller = new Controller(model, item);
-    console.log(1);
     routers.push(
       model.routes(
         item.endpoint,
@@ -19,7 +18,7 @@ export async function setupRouter(app: Ycs): Promise<Router[]> {
           path: '/',
           methods: ['get'],
           controller: controller.index,
-          tags: [`__plugin_fileuploader_${item.name}`],
+          tags: item.tags,
           summary: 'List documents',
           description: 'List documents',
           consumes: ['application/json', 'application/xml'],
@@ -37,13 +36,13 @@ export async function setupRouter(app: Ycs): Promise<Router[]> {
           },
         },
         {
-          path: item.endpoint,
+          path: '/',
           methods: ['post'],
           controller: controller.create,
           auth: {
             type: 'isAuthenticated',
           },
-          tags: [`__plugin_fileuploader_${item.name}`],
+          tags: item.tags,
           summary: 'Upload a file',
           description: `<b>allow: </b>${item.allowTypes.join}`,
           consumes: ['multipart/form-data'],
@@ -70,7 +69,7 @@ export async function setupRouter(app: Ycs): Promise<Router[]> {
           path: '/:id',
           methods: ['get'],
           controller: controller.show,
-          tags: [`__plugin_fileuploader_${item.name}`],
+          tags: item.tags,
           summary: 'Retrieve a document',
           description: 'Retrieve a document',
           consumes: ['application/json', 'application/xml'],
@@ -93,7 +92,7 @@ export async function setupRouter(app: Ycs): Promise<Router[]> {
             type: 'ownsOrHasRoles',
             roles: [item.authRole],
           },
-          tags: [`__plugin_fileuploader_${item.name}`],
+          tags: item.tags,
           summary: 'Modify a document',
           description: `<b>allow: </b>${item.allowTypes.join}`,
           consumes: ['multipart/form-data'],
@@ -125,7 +124,7 @@ export async function setupRouter(app: Ycs): Promise<Router[]> {
             type: 'ownsOrHasRoles',
             roles: [item.authRole],
           },
-          tags: [`__plugin_fileuploader_${item.name}`],
+          tags: item.tags,
           summary: 'Delete a document',
           description: 'Delete a document',
           produces: ['text/plain'],

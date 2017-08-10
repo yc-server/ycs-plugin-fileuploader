@@ -2,6 +2,7 @@ import { IErrors } from './errors';
 
 export interface IConfigItem {
   name: string;
+  tags: string[];
   endpoint: string;
   path: string;
   authRole: string;

@@ -17,7 +17,11 @@ export function createModel(item: IConfigItem): IModel {
         required: true,
       },
     },
-    { timestamps: {} }
+    {
+      timestamps: {},
+      toJSON: { virtuals: true },
+      toObject: { virtuals: true },
+    }
   );
   schema.virtual('url').get(function() {
     return item.url(this);

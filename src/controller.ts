@@ -51,17 +51,19 @@ function rm(path) {
 export class Controller {
   constructor(private model: IModel, private item: IConfigItem) {}
   // Gets a list of Models
-  public async index(ctx: IContext) {
+  public index = async (ctx: IContext) => {
     try {
+      console.log('here', ctx);
       const paginateResult = await paginate(this.model, ctx);
       response(ctx, 200, paginateResult);
     } catch (e) {
+      console.error(e);
       handleError(ctx, e);
     }
-  }
+  };
 
   // Gets a single Model from the DB
-  public async show(ctx: IContext) {
+  public show = async (ctx: IContext) => {
     try {
       const entity = await show(this.model, ctx);
       if (!entity) throw Boom.notFound();
@@ -70,10 +72,10 @@ export class Controller {
     } catch (e) {
       handleError(ctx, e);
     }
-  }
+  };
 
   // Creates a new Model in the DB
-  public async create(ctx: IContext) {
+  public create = async (ctx: IContext) => {
     try {
       if (!ctx.request.fields) throw Boom.badData(this.item.errors.empty);
       delete ctx.request.fields._id;
@@ -91,6 +93,7 @@ export class Controller {
       const ext = ss[ss.length - 1];
       entity['ext'] = ext;
       entity['mime'] = file.type;
+      entity['__auth'] = ctx.request.auth._id;
 
       const dir = this.item.path + '/' + ctx.request.auth._id;
       if (!await existsAsync(dir)) await mkdirAsync(dir);
@@ -101,10 +104,10 @@ export class Controller {
     } catch (e) {
       handleError(ctx, e);
     }
-  }
+  };
 
   // Updates an existing Model in the DB
-  public async update(ctx: IContext) {
+  public update = async (ctx: IContext) => {
     try {
       if (!ctx.request.fields) throw Boom.badData(this.item.errors.empty);
       delete ctx.request.fields._id;
@@ -134,10 +137,10 @@ export class Controller {
     } catch (e) {
       handleError(ctx, e);
     }
-  }
+  };
 
   // Deletes a Model from the DB
-  public async destroy(ctx: IContext): Promise<any> {
+  public destroy = async (ctx: IContext) => {
     try {
       const entity = await this.model.findById(ctx.params.id).exec();
       if (!entity) throw Boom.notFound();
@@ -149,5 +152,5 @@ export class Controller {
     } catch (e) {
       handleError(ctx, e);
     }
-  }
+  };
 }
