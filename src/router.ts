@@ -44,7 +44,7 @@ export async function setupRouter(app: Ycs): Promise<Router[]> {
           },
           tags: item.tags,
           summary: 'Upload a file',
-          description: `<b>allow: </b>${item.allowTypes.join}`,
+          description: `<b>allow: </b>${item.allowTypes.join()}`,
           consumes: ['multipart/form-data'],
           produces: ['application/json', 'application/xml'],
           parameters: [
@@ -94,7 +94,7 @@ export async function setupRouter(app: Ycs): Promise<Router[]> {
           },
           tags: item.tags,
           summary: 'Modify a document',
-          description: `<b>allow: </b>${item.allowTypes.join}`,
+          description: `<b>allow: </b>${item.allowTypes.join()}`,
           consumes: ['multipart/form-data'],
           produces: ['application/json', 'application/xml'],
           parameters: [
