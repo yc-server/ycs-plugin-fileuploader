@@ -8,7 +8,8 @@ import {
 } from '@ycs/core/lib/db';
 import { Boom, handleError } from '@ycs/core/lib/errors';
 import { response } from '@ycs/core/lib/response';
-import { exists, rename, unlink } from 'fs';
+import { exists, unlink } from 'fs';
+import { move } from 'fs-extra';
 import * as mkdirp from 'mkdirp';
 import { IConfigItem } from './config';
 import { IErrors } from './errors';
@@ -26,15 +27,6 @@ function existsAsync(path) {
   return new Promise(resolve => {
     exists(path, yes => {
       return resolve(yes);
-    });
-  });
-}
-
-function mv(oPath, nPath) {
-  return new Promise((resolve, reject) => {
-    rename(oPath, nPath, err => {
-      if (err) return reject(err);
-      return resolve(nPath);
     });
   });
 }
@@ -98,7 +90,7 @@ export class Controller {
       const dir = this.item.path + '/' + ctx.request.auth._id;
       if (!await existsAsync(dir)) await mkdirAsync(dir);
       const filePath = dir + '/' + entity._id + '.' + ext;
-      await mv(file.path, filePath);
+      await move(file.path, filePath);
       await entity.save();
       response(ctx, 201, entity);
     } catch (e) {
@@ -131,7 +123,7 @@ export class Controller {
       if (!await existsAsync(dir)) await mkdirAsync(dir);
       const filePath = dir + '/' + entity._id + '.' + ext;
       if (await existsAsync(filePath)) await rm(filePath);
-      await mv(file.path, filePath);
+      await move(file.path, filePath);
       await entity.save();
       response(ctx, 200, entity);
     } catch (e) {
